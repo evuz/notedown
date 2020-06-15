@@ -1,19 +1,18 @@
 import { UserAdapter } from '../Domain/Adapters/Mongoose/Entities/User.adapter'
+import { IDomain } from '../Domain/domain'
+
+type Context = {
+  domain: IDomain
+}
 
 export const resolvers = {
   users() {
     return UserAdapter.find()
   },
-  user({ id }) {
-    return UserAdapter.findById(id)
+  user(params, { domain }: Context) {
+    return domain.getUseCase('login').execute(params)
   },
-  register({ firstName, lastName, email }) {
-    const user = new UserAdapter({
-      firstName,
-      lastName,
-      email,
-      registerDate: Date.now()
-    })
-    return user.save().then(() => user)
+  register(user, { domain }: Context) {
+    return domain.getUseCase('register').execute(user)
   }
 }

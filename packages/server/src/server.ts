@@ -5,14 +5,15 @@ import { typeDefs } from './Schema/typeDefs'
 import { resolvers } from './Schema/resolvers'
 import { config } from './config'
 
-const fastify = f()
-fastify.register(gql, {
-  schema: typeDefs,
-  resolvers,
-  graphiql: true
-})
+export function startServer(domain) {
+  const fastify = f()
+  fastify.register(gql, {
+    schema: typeDefs,
+    resolvers,
+    context: () => ({ domain }),
+    graphiql: true
+  })
 
-export function server() {
   return fastify
     .listen({
       port: config.port

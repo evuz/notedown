@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
-import { server } from './server'
-import { db } from './db'
+import { startServer } from './server'
+import { startDB } from './db'
+import { domain } from './Domain/domain'
 
-Promise.all([server(), db()])
-  .then(([s]) => {
-    console.log(`server listening on ${(<any>s.server.address()).port}`)
+Promise.all([startServer(domain.getInstance()), startDB()])
+  .then(([server]) => {
+    console.log(`Server listening on ${(<any>server.server.address()).port}`)
   })
   .catch(error => {
     console.error(error)
