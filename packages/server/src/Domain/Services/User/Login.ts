@@ -1,7 +1,6 @@
-import jwt from 'jsonwebtoken'
-
 import { UserRepository } from '../../Repositories/User/UserRepository'
 import { IUser } from '../../Entities/User'
+import { Encoder } from '../../Adapters/Encoder/Encoder'
 
 type LoginExec = {
   id: IUser['id']
@@ -16,7 +15,11 @@ export class Login {
     return this.config.secret
   }
 
-  constructor(private repository: UserRepository, private config: any) {}
+  constructor(
+    private repository: UserRepository,
+    private encoder: Encoder,
+    private config: any
+  ) {}
 
   async execute(params: LoginExec) {
     const user = await this.repository.find(params)
@@ -24,7 +27,10 @@ export class Login {
       throw Error('Unauthorize')
     }
 
-    const token = jwt.sign({ user: user.id, iat: Date.now() }, this.jwtSecret)
+    const token = await this.encoder.encode(
+      { user: user.id, iat: Date.now() },
+      this.jwtSecret
+    )
     return { user, token }
   }
 }

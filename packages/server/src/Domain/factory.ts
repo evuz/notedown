@@ -6,6 +6,7 @@ import { GeneratePhrase } from './Services/User/GeneratePhrase'
 import { StartDB } from './Services/StartDB'
 import { MongooseDatabase } from './Adapters/Mongoose/MongooseDatabase'
 import { config } from '../config'
+import { jwtEncoder } from './Adapters/Encoder/jwtEncoder'
 
 export function domainFactory() {
   const repositories = {
@@ -13,7 +14,8 @@ export function domainFactory() {
   }
 
   const adapters = {
-    db: new MongooseDatabase(config)
+    db: new MongooseDatabase(config),
+    encoder: jwtEncoder()
   }
 
   const generatePhraseSrv = new GeneratePhrase(repositories.user)
@@ -21,7 +23,7 @@ export function domainFactory() {
   const services = {
     startDB: new StartDB(adapters.db),
     register: new Register(repositories.user),
-    login: new Login(repositories.user, config),
+    login: new Login(repositories.user, adapters.encoder, config),
     generatePhrase: generatePhraseSrv
   }
 
