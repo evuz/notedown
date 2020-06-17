@@ -9,10 +9,13 @@ export const resolvers = {
   users() {
     return UserAdapter.find()
   },
-  user(params, { domain }: Context) {
-    return domain.getUseCase('login').execute(params)
-  },
   register(user, { domain }: Context) {
     return domain.getUseCase('register').execute(user)
+  },
+  login(params, { domain }: Context) {
+    return domain.getUseCase('login').execute(params)
+  },
+  generatePhrase(params, { domain }: Context) {
+    return domain.getUseCase('generatePhrase').execute(params)
   }
 }

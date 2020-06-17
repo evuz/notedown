@@ -6,6 +6,7 @@ export interface IUser {
   lastName: string
   email: string
   registerDate: number
+  password: string
 }
 
 export interface User extends IUser {}

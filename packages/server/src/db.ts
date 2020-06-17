@@ -5,6 +5,7 @@ import { config } from './config'
 export function startDB() {
   return mongoose.connect(config.db, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   })
 }

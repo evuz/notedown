@@ -9,6 +9,11 @@ export const typeDefs = buildSchema(`
     registerDate: Float
   }
 
+  type LoginRes {
+    user: User!
+    token: String!
+  }
+
   type Query {
     users: [User]!
     user(id: String): User!
@@ -16,5 +21,7 @@ export const typeDefs = buildSchema(`
 
   type Mutation {
     register(firstName: String!, lastName: String, email: String!): User!
+    login(id: ID!, password: String!): LoginRes!
+    generatePhrase(email: String!): ID!
   }
 `)

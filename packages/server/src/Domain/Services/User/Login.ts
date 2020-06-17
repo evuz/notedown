@@ -1,10 +1,30 @@
+import jwt from 'jsonwebtoken'
+
 import { UserRepository } from '../../Repositories/User/UserRepository'
 import { IUser } from '../../Entities/User'
 
-export class Login {
-  constructor(private repository: UserRepository) {}
+type LoginExec = {
+  id: IUser['id']
+  password: string
+}
 
-  execute(user: Partial<IUser>) {
-    return this.repository.find(user)
+export class Login {
+  get jwtSecret() {
+    if (!this.config.secret) {
+      throw Error('JWTSecret is needed')
+    }
+    return this.config.secret
+  }
+
+  constructor(private repository: UserRepository, private config: any) {}
+
+  async execute(params: LoginExec) {
+    const user = await this.repository.find(params)
+    if (!user.password || user.password !== params.password) {
+      throw Error('Unauthorize')
+    }
+
+    const token = jwt.sign({ user: user.id, iat: Date.now() }, this.jwtSecret)
+    return { user, token }
   }
 }
