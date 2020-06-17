@@ -16,7 +16,6 @@ type GetConfig = {
 export class Domain<T> {
   private useCases: T
   private config: { [e: string]: any }
-  public adapters: any
 
   constructor({ useCases, config = {} }: Args<T>) {
     this.useCases = useCases
