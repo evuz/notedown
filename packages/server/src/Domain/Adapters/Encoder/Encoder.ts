@@ -1,12 +1,9 @@
 export type EncodeOptions = {
-  expiresIn: string
+  expiresIn?: string
+  secret?: string
 }
 
 export interface Encoder {
-  encode(
-    payload: object,
-    secret: string,
-    options?: EncodeOptions
-  ): Promise<string>
-  decode(token: string, secret: string): Promise<object>
+  encode(payload: any, options?: EncodeOptions): Promise<string>
+  decode(token: string, secret?: string): Promise<any>
 }

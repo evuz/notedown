@@ -8,29 +8,17 @@ type LoginExec = {
 }
 
 export class Login {
-  get jwtSecret() {
-    if (!this.config.secret) {
-      throw Error('JWTSecret is needed')
-    }
-    return this.config.secret
-  }
-
-  constructor(
-    private repository: UserRepository,
-    private encoder: Encoder,
-    private config: any
-  ) {}
+  constructor(private repository: UserRepository, private encoder: Encoder) {}
 
   async execute(params: LoginExec) {
     const user = await this.repository.find(params)
+
     if (!user.password || user.password !== params.password) {
       throw Error('Unauthorize')
     }
+    await this.repository.update(user, { password: undefined })
 
-    const token = await this.encoder.encode(
-      { user: user.id, iat: Date.now() },
-      this.jwtSecret
-    )
+    const token = await this.encoder.encode({ user: user.id, iat: Date.now() })
     return { user, token }
   }
 }

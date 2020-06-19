@@ -15,7 +15,7 @@ export function domainFactory() {
 
   const adapters = {
     db: new MongooseDatabase(config),
-    encoder: jwtEncoder()
+    encoder: jwtEncoder({ secret: config.secret })
   }
 
   const generatePhraseSrv = new GeneratePhrase(repositories.user)
@@ -23,7 +23,7 @@ export function domainFactory() {
   const services = {
     startDB: new StartDB(adapters.db),
     register: new Register(repositories.user),
-    login: new Login(repositories.user, adapters.encoder, config),
+    login: new Login(repositories.user, adapters.encoder),
     generatePhrase: generatePhraseSrv
   }
 
