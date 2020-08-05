@@ -8,7 +8,7 @@
     "start:dev": "nodemon dist/index.js"
   },
   "dependencies": {
-    "fastify": "^2.14.1",
+    "fastify": "^2.15.1",
     "fastify-gql": "^4.0.0",
     "graphql": "^15.1.0",
     "jsonwebtoken": "^8.5.1",
